@@ -82,7 +82,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             response = super().destroy(request, *args, **kwargs)
             return response
         return Response({
-            'error': 'Удалять заявки могут только дилеры'
+            'error': 'Удалять заявки могут только дилеры, которым они отправлены'
         })
 
     def perform_create(self, serializer):
