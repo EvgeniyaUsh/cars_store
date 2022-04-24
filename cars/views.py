@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from django.contrib.auth.models import User
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from cars.models import Car, Application
 from cars.permisisions import IsOwnerOrReadOnly
 from cars.serializers import CarDealerSerializer, CarSerializer, ApplicationSerializer
@@ -32,6 +32,7 @@ def send_application_to_dealer(data, application):
 class CarDealerViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CarDealerSerializer
+    permission_classes = (IsAdminUser,)
 
 
 class CarViewSet(viewsets.ModelViewSet):
@@ -54,14 +55,35 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 "applications": serializer.data
             })
         return Response({
-            'error': 'Смотреть список заявок могут только дилеры'
+            'error': 'Смотреть список заявок могут только дилеры.'
         })
 
     def create(self, request, *args, **kwargs):
+        """Создавать заявки могут любые пользователи сайта"""
         response = super().create(request, *args, **kwargs)
         dealer_id = Car.objects.get(id=response.data['car_id']).dealer_id.id
         Application.objects.update(dealer_id=dealer_id)
         return response
+
+    def retrieve(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            dealer_id = Application.objects.get(id=serializer.data['id']).dealer_id
+            if dealer_id == request.user.id:
+                return Response(serializer.data)
+
+        return Response({
+            'error': 'Смотреть заявки могут только дилеры, которым они отправлены'
+        })
+
+    def destroy(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            response = super().destroy(request, *args, **kwargs)
+            return response
+        return Response({
+            'error': 'Удалять заявки могут только дилеры'
+        })
 
     def perform_create(self, serializer):
         application = serializer.save()
