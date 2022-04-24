@@ -45,6 +45,13 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     queryset = Application.objects.all()
     serializer_class = ApplicationSerializer
 
+    def create(self, request, *args, **kwargs):
+        """Создавать заявки могут любые пользователи сайта"""
+        response = super().create(request, *args, **kwargs)
+        dealer_id = Car.objects.get(id=response.data['car_id']).dealer_id.id
+        Application.objects.update(dealer_id=dealer_id)
+        return response
+
     def list(self, request, *args, **kwargs):
         """Дилерам отображаются заявки только по их машинам"""
         if request.user.is_authenticated:
@@ -57,13 +64,6 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         return Response({
             'error': 'Смотреть список заявок могут только дилеры.'
         })
-
-    def create(self, request, *args, **kwargs):
-        """Создавать заявки могут любые пользователи сайта"""
-        response = super().create(request, *args, **kwargs)
-        dealer_id = Car.objects.get(id=response.data['car_id']).dealer_id.id
-        Application.objects.update(dealer_id=dealer_id)
-        return response
 
     def retrieve(self, request, *args, **kwargs):
         if request.user.is_authenticated:
