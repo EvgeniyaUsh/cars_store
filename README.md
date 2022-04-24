@@ -57,12 +57,12 @@
 
 {
 
-        "dealer_name": "BMW",
-        "model": "BMW X1",
-        "engine": "140 л.с",
-        "color": "Blue",
-        "price": 4000000,
-        "description": "В ожидании знаковых событий: новый BMW X1 появился, чтобы задавать новые стандарты. Его стремление действовать выражается прежде всего в спортивном дизайне."  
+    "dealer_name": "BMW",
+    "model": "BMW X1",
+    "engine": "140 л.с",
+    "color": "Blue",
+    "price": 4000000,
+    "description": "В ожидании знаковых событий: новый BMW X1 появился, чтобы задавать новые стандарты. Его стремление действовать выражается прежде всего в спортивном дизайне."  
         
 }
 
@@ -77,12 +77,12 @@
 **/api/application/**   принимает **post** запрос
 {
 
-        "id": 1,
-        "name": "Vasya",
-        "email": "vasya@gmail.com",
-        "number": "8952637455",
-        "application_subject": "test",
-        "car_id": 1
+     "id": 1,
+     "name": "Vasya",
+     "email": "vasya@gmail.com",
+     "number": "8952637455",
+     "application_subject": "test",
+     "car_id": 1
         
 }
 
