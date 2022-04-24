@@ -28,11 +28,11 @@
 
 с полями в **json** формате, *пример*:
 
-{
+*{
   'username' : Tom,   
   'email' : 'tom@gmail.com',   
   'password' : 'sdcscdcc7dc6s7dcybsudc'    
-}
+}*
 
 пример ответа:
 
